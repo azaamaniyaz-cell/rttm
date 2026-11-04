@@ -1,6 +1,6 @@
 # RTM IT Management
 
-O‘zbekiston davlat jismoniy tarbiya va sport universiteti Nukus filiali uchun texnik xizmat va AKT inventarini boshqarish tizimining ishlaydigan test versiyasi. Manba: `RTM_IT_texnik_topshiriq_2026.docx`, 2026-yil 4-noyabr.
+Texnik xizmat va AKT inventarini boshqarish tizimining ishlaydigan test versiyasi. Manba: `RTM_IT_texnik_topshiriq_2026.docx`, 2026-yil 4-noyabr.
 
 Tizim markaziy serverda ishlaydi. Brauzer, API, autentifikatsiya, QR, PDF, DOCX va Excel funksiyalari tashqi internet yoki CDNga murojaat qilmaydi. Kutubxonalarni dastlab o‘rnatish yoki Docker obrazini qurish uchun internet kerak; tayyor muhitni LANda internetsiz ishlatish mumkin.
 
