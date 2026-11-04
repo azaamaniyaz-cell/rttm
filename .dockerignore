@@ -1,0 +1,9 @@
+node_modules
+data
+backups
+test-results
+.git
+.env*
+*.docx
+docs
+deploy/certs

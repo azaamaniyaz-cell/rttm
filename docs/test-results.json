@@ -1,0 +1,78 @@
+{
+  "date": "2026-11-04T16:47:22.703Z",
+  "database": "SQLite",
+  "results": [
+    {
+      "name": "Password / TOTP",
+      "status": "passed"
+    },
+    {
+      "name": "Auth / MFA / CSRF",
+      "status": "passed"
+    },
+    {
+      "name": "RBAC / IDOR",
+      "status": "passed"
+    },
+    {
+      "name": "Ticket create / SLA / idempotency",
+      "status": "passed"
+    },
+    {
+      "name": "Ticket workflow / history / rating",
+      "status": "passed"
+    },
+    {
+      "name": "Inventory / uniqueness / QR",
+      "status": "passed"
+    },
+    {
+      "name": "Assignment / transfer / return",
+      "status": "passed"
+    },
+    {
+      "name": "Maintenance / stock / transactions",
+      "status": "passed"
+    },
+    {
+      "name": "Concurrent stock safety",
+      "status": "passed"
+    },
+    {
+      "name": "Network / IP / license limits",
+      "status": "passed"
+    },
+    {
+      "name": "Uploads / attachment IDOR",
+      "status": "passed"
+    },
+    {
+      "name": "Exports / documents / approval",
+      "status": "passed"
+    },
+    {
+      "name": "Excel import / rollback",
+      "status": "passed"
+    },
+    {
+      "name": "User / department / offboarding",
+      "status": "passed"
+    },
+    {
+      "name": "Audit / notifications / local assets",
+      "status": "passed"
+    },
+    {
+      "name": "Backup / integrity / restore",
+      "status": "passed"
+    },
+    {
+      "name": "30 concurrent dashboard duration",
+      "milliseconds": 59
+    },
+    {
+      "name": "30 concurrent requests",
+      "status": "passed"
+    }
+  ]
+}

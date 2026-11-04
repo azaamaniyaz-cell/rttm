@@ -1,0 +1,16 @@
+node_modules/
+.env
+.env.*
+!.env.example
+!deploy/.env.production.example
+data/
+backups/
+test-results/
+*.log
+RTM_IT_texnik_topshiriq_2026.docx
+docs/screenshots/
+deploy/certs/
+*.key
+*.pem
+*.pfx
+*.p12

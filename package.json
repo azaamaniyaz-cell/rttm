@@ -1,0 +1,32 @@
+{
+  "name": "rtm-it-management",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "RTM IT — lokal tarmoq uchun texnik xizmat va inventar boshqaruvi",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "setup:test": "node scripts/setup-test.js",
+    "start": "node --env-file-if-exists=.env server/index.js",
+    "dev": "node --watch --env-file-if-exists=.env server/index.js",
+    "test": "node --test --test-concurrency=1 tests/*.test.js",
+    "check": "node --check server/index.js && node --check server/db.js && node --check server/security.js && node --check public/app.js",
+    "backup": "node --env-file-if-exists=.env scripts/backup.js",
+    "restore": "node --env-file-if-exists=.env scripts/restore.js",
+    "mfa": "node --env-file-if-exists=.env scripts/mfa.js"
+  },
+  "dependencies": {
+    "docx": "^9.5.1",
+    "exceljs": "^4.4.0",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "multer": "^2.0.2",
+    "pdfkit": "^0.17.2",
+    "pg": "^8.16.3",
+    "qrcode": "^1.5.4"
+  },
+  "overrides": {
+    "minimatch": "^11.0.1",
+    "uuid": "^11.1.1"
+  }
+}
