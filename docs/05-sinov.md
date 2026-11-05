@@ -2,7 +2,9 @@
 
 ## Avtomatik tekshiruv
 
-`npm run check` JavaScript sintaksisini tekshiradi. `npm test` har safar mustaqil SQLite bazasi bilan server ochadi. Testlar asosiy `data/`ga yozmaydi. 17 ta biznes/xavfsizlik ssenariysi va ularni o‘rab turgan bitta test — jami Node test hisobotida 18 ta test.
+`npm run check` JavaScript sintaksisini tekshiradi. `npm test` har safar mustaqil SQLite bazasi bilan server ochadi. Testlar asosiy `data/`ga yozmaydi. 0.2.0 da 21 ta biznes/xavfsizlik ssenariysi va ularni o‘rab turgan bitta test — jami Node test hisobotida 22 ta test.
+
+2026-yil 5-noyabr qo‘shimchalari: barcha cheklangan rollarda shaxsiy qurilma scope va eksport; SLA konfiguratsiyasi/versiyasi/eski muddat/parallel tahrir; imzolangan faylga kirish, versiyalar, mustaqil tekshiruv va harakat nusxasi o‘zgarmasligi; eski 2-versiya bazasini yozuvlarni saqlab 3-versiyaga migratsiya qilish. Foyda va qarorlar [yangilanish bahosida](06-takliflar-va-yangilanish.md).
 
 | Ssenariy | Tekshiruv |
 | --- | --- |
@@ -25,6 +27,12 @@
 | Yengil yuklama | 30 parallel dashboard so‘rovi, 200 statuslari va jami <15 soniya |
 
 Natijalar `test-results/run-*/summary.json`da vaqt belgisi bilan saqlanadi. Lokal tekshiruv 2026-yil 4-noyabrda bajarildi. Qayta bajarilgan testning eng yangi `summary.json`i yakuniy dalil hisoblanadi. Ishlash vaqti konkret ish stansiyasi va kichik sun’iy bazaga tegishli; haqiqiy foydalanuvchi soni uchun kafolat emas.
+
+## 0.3.0 natijalari
+
+2026-yil 5-noyabrda ko‘p rol, ikkinchi rolning huquqlari va ijrochi tanlovi, xodim/bo‘lim tahriri, birgalikdagi qidiruv-filtrlar, sessiyalarni bekor qilish, faolsizlantirish va bo‘shagan holati, audit oldingi-keyingi qiymatlari, sahifalash va 3→4 migratsiya sinovlari qo‘shildi. Jami **27 test: 27 o‘tdi, 0 xato** (26 ichki ssenariy va tashqi test). `npm run check` ham o‘tdi. Yakuniy lokal natija [test-results.json](test-results.json)da; yuklama sinovi 30 parallel so‘rov uchun 126 ms. Bu kichik sun’iy SQLite bazasi o‘lchovi.
+
+Superadmin UI tekshiruvida xodim/bo‘lim qidiruvi, rol filtri, tahrir oynalari, toggle tasdig‘i, qurilmali xodimni faolsizlantirishning rad etilishi, faol hisob uchun bo‘shagan variantining bloklanishi va jurnal qidiruv/tafsiloti ko‘rildi. 390px ekran kengligida gorizontal sahifa toshishi kuzatilmadi; jadval o‘z konteynerida aylantiriladi. Brauzer error loglari bo‘sh. Muvaffaqiyatli hisob/rol/holat o‘zgarishlari izolyatsiyalangan integratsion bazada tekshirildi; asosiy bazadagi mavjud xodimlarning vakolatlari UI sinovi uchun o‘zgartirilmadi.
 
 ## Brauzer tekshiruvi
 

@@ -88,6 +88,33 @@ export async function initDb() {
       await tx.run('INSERT INTO schema_versions (version, applied_at) VALUES (2, ?)', [new Date().toISOString()]);
     });
   }
+  if (!await db.get('SELECT version FROM schema_versions WHERE version=3')) {
+    await transaction(async tx => {
+      await tx.run(`CREATE TABLE sla_policy (id INTEGER PRIMARY KEY CHECK(id=1), critical INTEGER NOT NULL, high INTEGER NOT NULL, medium INTEGER NOT NULL, low INTEGER NOT NULL, revision INTEGER NOT NULL, updated_by INTEGER REFERENCES users(id), updated_at TEXT NOT NULL)`);
+      await tx.run('INSERT INTO sla_policy (id, critical, high, medium, low, revision, updated_at) VALUES (1, 4, 8, 24, 72, 1, ?)', [new Date().toISOString()]);
+      await tx.run('ALTER TABLE tickets ADD COLUMN sla_hours INTEGER');
+      await tx.run('ALTER TABLE tickets ADD COLUMN sla_policy_revision INTEGER');
+      await tx.run("ALTER TABLE assignments ADD COLUMN snapshot_json TEXT NOT NULL DEFAULT ''");
+      await tx.run(`CREATE TABLE signed_document_files (id ${id}, document_id INTEGER NOT NULL REFERENCES documents(id), filename TEXT NOT NULL, storage_name TEXT NOT NULL UNIQUE, mime TEXT NOT NULL, size INTEGER NOT NULL, sha256 TEXT NOT NULL, uploaded_by INTEGER NOT NULL REFERENCES users(id), uploaded_at TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'pending', reviewed_by INTEGER REFERENCES users(id), reviewed_at TEXT, review_note TEXT NOT NULL DEFAULT '')`);
+      await tx.run('CREATE INDEX idx_signed_document ON signed_document_files(document_id, id)');
+      await tx.run('CREATE UNIQUE INDEX idx_signed_document_hash ON signed_document_files(document_id, sha256)');
+      await tx.run('INSERT INTO schema_versions (version, applied_at) VALUES (3, ?)', [new Date().toISOString()]);
+    });
+  }
+  if (!await db.get('SELECT version FROM schema_versions WHERE version=4')) {
+    await transaction(async tx => {
+      await tx.run('CREATE TABLE user_roles (user_id INTEGER NOT NULL REFERENCES users(id), role TEXT NOT NULL, PRIMARY KEY(user_id, role))');
+      await tx.run('INSERT INTO user_roles (user_id, role) SELECT id, role FROM users');
+      await tx.run("ALTER TABLE users ADD COLUMN employment_status TEXT NOT NULL DEFAULT 'employed' CHECK(employment_status IN ('employed','dismissed') AND (employment_status!='dismissed' OR active=0))");
+      await tx.run('ALTER TABLE users ADD COLUMN revision INTEGER NOT NULL DEFAULT 1');
+      await tx.run('ALTER TABLE departments ADD COLUMN revision INTEGER NOT NULL DEFAULT 1');
+      await tx.run("ALTER TABLE audit ADD COLUMN before_json TEXT NOT NULL DEFAULT ''");
+      await tx.run("ALTER TABLE audit ADD COLUMN after_json TEXT NOT NULL DEFAULT ''");
+      await tx.run('CREATE INDEX idx_user_roles_role ON user_roles(role,user_id)');
+      await tx.run('CREATE INDEX idx_audit_filter ON audit(entity,action,id)');
+      await tx.run('INSERT INTO schema_versions (version, applied_at) VALUES (4, ?)', [new Date().toISOString()]);
+    });
+  }
   if (await db.get('SELECT id FROM users LIMIT 1')) return;
   await transaction(async tx => {
     const now = new Date().toISOString();
@@ -104,7 +131,10 @@ export async function initDb() {
       ['Rustam Saparov', 'sport', 'employee', 3], ['Sardor Qurbanov', 'ombor', 'inventory', 1],
       ['Gulnora Beknazarova', 'moliya', 'employee', 4]
     ] : [['Administrator', 'admin', 'superadmin', 1]];
-    for (const row of users) await tx.run('INSERT INTO users (name, username, role, department_id, password_hash, phone, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)', [...row, hashPassword(password), '+998 61 222 01 01', now]);
+    for (const row of users) {
+      const user = await tx.get('INSERT INTO users (name, username, role, department_id, password_hash, phone, created_at) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id', [...row, hashPassword(password), '+998 61 222 01 01', now]);
+      await tx.run('INSERT INTO user_roles (user_id, role) VALUES (?, ?)', [user.id, row[2]]);
+    }
     if (!demo) return;
     const models = [['Kompyuter', 'Lenovo ThinkCentre M70s', 'Core i5-12400 · 16 GB RAM · 512 GB SSD'], ['Noutbuk', 'HP ProBook 450 G9', 'Core i5-1235U · 16 GB RAM · 512 GB SSD'], ['Printer', 'Canon i-SENSYS MF3010', 'Lazerli · A4 · USB'], ['Monitor', 'Dell P2422H', '24 dyuym · IPS · Full HD'], ['Switch', 'TP-Link TL-SG2428P', '24 port · PoE+ · Gigabit'], ['Access point', 'Ubiquiti UniFi U6 Lite', 'Wi-Fi 6 · 2×2 MIMO'], ['UPS', 'APC Back-UPS 1100', '1100 VA · 660 W'], ['Proyektor', 'Epson EB-X49', '3600 lm · XGA']];
     for (let i = 0; i < 24; i++) {

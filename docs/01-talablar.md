@@ -10,12 +10,16 @@ Texnik murojaatlar, filialning AKT vositalari va xizmat ko‘rsatishni LANdagi y
 | --- | --- | --- | --- |
 | Superadministrator | Barchasi | Barchasi | Hisob, bo‘lim, audit va barcha modullar; MFA |
 | Markaz rahbari | Barchasi | Barchasi | Ijrochilar, xizmat, resurslar, hujjat tasdig‘i |
-| IT mutaxassisi | O‘zi yaratgan yoki o‘ziga biriktirilgan | Texnik xizmat uchun barchasi | O‘z ishlarini bajarish, diagnostika, IP va dastur o‘rnatish |
-| Bo‘lim rahbari | Faqat o‘z bo‘limi | Faqat o‘z bo‘limi | O‘z murojaatini tasdiqlash, bo‘lim nazorati |
+| IT mutaxassisi | O‘zi yaratgan yoki o‘ziga biriktirilgan | Faqat o‘ziga biriktirilgan | O‘z ishlarini bajarish; begona qurilma kartochkasi ochilmaydi |
+| Bo‘lim rahbari | Faqat o‘z bo‘limi | Faqat o‘ziga biriktirilgan | O‘z murojaatini tasdiqlash, bo‘lim murojaatlari nazorati |
 | Oddiy xodim | Faqat o‘zi yaratgan | Faqat o‘ziga biriktirilgan | Yangi murojaat, izoh, tasdiq, baho |
-| Moddiy javobgar | Faqat o‘zi yaratgan | Barchasi, markaziy hisob vakolati | Inventar, biriktirish, tekshiruv, ombor, hujjat loyihasi |
+| Moddiy javobgar | Faqat o‘zi yaratgan | Faqat o‘ziga biriktirilgan | Ombor sarf materiallari va shaxsiy qurilma hujjatlari |
 
-Markaziy moddiy javobgarga barcha bo‘limlar hisobi berilgan. Bo‘limlar kesimida bir nechta moddiy javobgar zarur bo‘lsa, alohida delegatsiya jadvali va scope siyosati qo‘shilishi kerak. Rolni almashtirish yoki hisobni faolsizlantirish uning eski sessiyalarini bekor qiladi.
+0.2.0 talabi asosida umumiy inventar, yaratish/import va biriktirish/qaytarish faqat markaz rahbari hamda superadminga berilgan. Boshqa barcha rollarda menyu **Mening qurilmalarim**. Alohida inventar operatori zarur bo‘lsa, kelajakda aniq delegatsiya huquqi qo‘shilishi kerak. Rolni almashtirish yoki hisobni faolsizlantirish uning eski sessiyalarini bekor qiladi.
+
+0.3.0 da xodimda kamida bitta va bir nechta rol bo‘lishi mumkin; huquqlar birlashadi. Masalan, bo‘lim rahbari + IT mutaxassisi o‘z bo‘limi murojaatlari va o‘ziga ijro uchun biriktirilgan murojaatlarni ko‘radi. Qurilmalarni umumiy ko‘rish faqat manager/superadmin roli mavjud bo‘lsa beriladi. Rollar ro‘yxati belgilangan; bu versiyada yangi turdagi rol yaratish yoki rolning huquq matritsasini tahrirlash muharriri yo‘q.
+
+**Bo‘shagan** — kirish huquqi beradigan rol emas, alohida ish holati. Unga o‘tishdan avval hisob alohida amal bilan faol emas qilinishi shart. Qurilmalar, ochiq ijro ishlari va rejalashtirilgan xizmatlar topshirilmaguncha faolsizlantirish bloklanadi. Xodim/bo‘lim tahriri va faollikni boshqarish faqat superadmin vakolatida; markaz rahbari ro‘yxatni o‘qiydi. Tizim jurnali faqat superadminga ochiq.
 
 ## Murojaat ish oqimi
 
@@ -38,6 +42,8 @@ Buyurtmachi bilan yakuniy tasdiqlash uchun taklif:
 | RPO / RTO | Taklif: 24 soat / 4 soat; real serverda mashq bilan tasdiqlash kerak |
 
 SLA ish kunlari kalendarini hisoblamaydi. Ustuvorlik rahbar tomonidan o‘zgartirilsa, yangi muddat shu paytdan qayta hisoblanadi va audit yoziladi. Monitoring tashqi agentga bog‘lanmagan: ogohlantirishlar dashboard va bildirishnoma so‘rovida joriy server vaqti bilan hisoblanadi. Bu faol foydalanuvchiga ishlaydigan ichki eskalatsiya; ekran yopiq paytda email/Telegram yetkazish hali yo‘q.
+
+0.2.0 da jadvaldagi SLA soatlari dastlabki qiymatlardir. Superadmin ularni Sozlamalardan 1–720 soat chegarasida o‘zgartiradi; global tahrir mavjud murojaatlarning muddatiga ta’sir qilmaydi. Har yangi qo‘llanishda qoida versiyasi va soat murojaatda saqlanadi.
 
 ## Rejimlar
 

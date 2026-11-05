@@ -25,6 +25,7 @@ Brauzerga ma’lumotlar bazasi rekvizitlari berilmaydi. Fayl katalogi `public/`d
 erDiagram
     DEPARTMENTS ||--o{ USERS : includes
     DEPARTMENTS ||--o{ DEVICES : owns
+    USERS ||--o{ USER_ROLES : permissions
     USERS ||--o{ DEVICES : assigned
     USERS ||--o{ TICKETS : creates
     USERS ||--o{ TICKETS : executes
@@ -47,6 +48,18 @@ erDiagram
 ```
 
 Sxema `server/db.js`da versiyalangan: 1 — asosiy jadvallar va indekslar; 2 — qayta ishlatilgan MFA kodini bloklash uchun `mfa_last_step`. Boshlang‘ich ma’lumotlar faqat foydalanuvchilar jadvali bo‘sh bo‘lganda yaratiladi. Keyingi sxema o‘zgarishlari yangi versiya sifatida qo‘shiladi.
+
+3-versiya: `sla_policy`, murojaatda `sla_hours`/`sla_policy_revision`, harakatda `snapshot_json` va `signed_document_files`. Oxirgi jadval hujjatga tashqi kalit bilan bog‘langan, nusxaning SHA-256 xeshi, yuklovchi, vaqt va mustaqil tekshiruv qarorini saqlaydi. Fayllar amaldagi himoyalangan upload katalogida saqlanadi. Mavjud yozuvlar hamda muddatlar migratsiyada o‘zgartirilmaydi.
+
+Yangi API: `GET /api/settings/sla` (barcha hisoblar), `PUT /api/settings/sla` (faqat superadmin, to‘rtta soat va `revision`), `GET /api/documents/:id`, `GET/POST /api/documents/:id/signed-files`, `GET /api/signed-files/:id/download`, `POST /api/signed-files/:id/review` (`status: accepted|rejected`, `confirm: true`, `note`). Upload multipart `file` va `confirm=true` talab qiladi. Fayl yuklovchisi o‘z nusxasini tasdiqlay olmaydi. Transfer hujjati uchun eski umumiy `/approve` yo‘li ham tekshirilgan nusxasiz tasdiqlashga yo‘l bermaydi.
+
+4-versiya (0.3.0): `user_roles(user_id, role)` bog‘lanish jadvali mavjud asosiy rollardan to‘ldiriladi. `users.employment_status`, `users.revision`, `departments.revision`, `audit.before_json/after_json` hamda rol/jurnal indekslari qo‘shiladi. Mavjud faol/faol emas hisoblar, bo‘limlar va tarix saqlanadi. Bazadagi CHECK cheklovi bo‘shagan hisobning faol bo‘lishini taqiqlaydi. Eski `users.role` moslik uchun saqlanadi; haqiqiy vakolat `user_roles`dan olinadi.
+
+`POST /api/users` va `PATCH /api/users/:id` `roles: ["technician", "department_head"]` qabul qiladi. Eski bitta `role` maydoni ham qo‘llab-quvvatlanadi. Tahrirda `confirm: true`; UI joriy `revision`ni yuboradi, eskirgan versiya 409 qaytaradi. `active` boolean; yuborilmasa o‘zgarmaydi. `employment_status` employed/dismissed. O‘z superadmin huquqini yoki faolligini olib tashlash, oxirgi faol adminni bloklash va alohida MFA sozlashsiz yangi superadmin berish rad etiladi. Tahrir target xodimning barcha sessiyalarini bekor qiladi.
+
+`GET /api/users`: `q`, `role` (barcha biriktirilgan rollar ichidan), `department_id`, `active=0|1`, `employment_status`. `GET /api/departments`: `q`, `building`. `PATCH /api/departments/:id`: `name`, `building`, `revision`, `confirm: true`. Departament tahriri mavjud IDni saqlaydi.
+
+`GET /api/audit`: `q`, `action`, `entity`, `user_id`, `entity_id`, `from`, `to`, `page`, `limit` (1–500); UI 50 yozuvli sahifalar ishlatadi. Sana chegaralari Toshkent vaqti bo‘yicha hisoblanadi. Yozuvda actor, sana, IP, amal, obyekt va tafsilot mavjud. Yangi xodim/bo‘lim/SLA tahrirlari uchun xavfsiz oldingi-keyingi maydonlar ham bor; parol xeshi va MFA siri ularga kiritilmaydi. API jurnalni tahrirlash yoki o‘chirish yo‘lini bermaydi.
 
 ## API shartnomasi
 
@@ -73,7 +86,7 @@ JSON javob; muvaffaqiyatsiz so‘rov `{"error":"..."}`. HTTP: 400 validatsiya, 4
 | `/networks` | GET, POST | Subnet va IP nazorati |
 | `/licenses`, `/licenses/:id/install` | GET, POST / POST | Litsenziya va o‘rnatish |
 | `/users`, `/users/:id`, `/users/:id/checklist` | GET, POST / PATCH / GET | Hisoblar va chiqish tekshiruvi |
-| `/departments` | GET, POST | Bo‘limlar |
+| `/departments`, `/departments/:id` | GET, POST / PATCH | Bo‘limlar va tahrirlash |
 | `/documents`, `/documents/:id/approve` | GET, POST / POST | Hujjat va tasdiqlash |
 | `/documents/:id/download?format=pdf\|docx` | GET | Hujjat yaratib yuklash |
 | `/exports/:entity?format=xlsx\|csv\|pdf` | GET | Scope va filtr bo‘yicha hisobot |

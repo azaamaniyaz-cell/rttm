@@ -4,6 +4,7 @@ import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, Width
 import { existsSync } from 'node:fs';
 
 export const labels = {
+  pending: 'Tekshiruvda', accepted: 'Nusxa qabul qilingan',
   new: 'Yangi', reviewing: 'Ko‘rib chiqilmoqda', assigned: 'Biriktirildi', in_progress: 'Jarayonda', completed: 'Bajarildi', confirmed: 'Tasdiqlandi', closed: 'Yopildi', waiting: 'Kutishda', rejected: 'Rad etildi', reopened: 'Qayta ochildi',
   critical: 'Shoshilinch', high: 'Yuqori', medium: 'O‘rta', low: 'Past', warehouse: 'Omborda', in_use: 'Foydalanishda', reserve: 'Zaxirada', diagnostics: 'Diagnostikada', repair: 'Ta’mirlashda', faulty: 'Nosoz', retired: 'Hisobdan chiqarilgan', planned: 'Rejada', done: 'Bajarilgan', draft: 'Loyiha', approved: 'Tasdiqlangan'
 };
@@ -60,6 +61,30 @@ export function pdfBuffer(title, lines) {
 export async function docxBuffer(title, lines) {
   const doc = new Document({ styles: { default: { document: { run: { font: 'Arial', size: 22, color: '000000' }, paragraph: { spacing: { after: 160, line: 300 } } } }, paragraphStyles: [{ id: 'Title', name: 'Title', basedOn: 'Normal', run: { font: 'Arial', size: 36, bold: true, color: '000000' }, paragraph: { spacing: { after: 320 } } }] }, sections: [{ children: [new Paragraph({ text: title, heading: 'Title' }), ...lines.map(text => new Paragraph({ children: [new TextRun(text)], spacing: { after: 180 } })), new Paragraph('Imzolar: topshiruvchi __________________  qabul qiluvchi __________________')] }] });
   return Packer.toBuffer(doc);
+}
+export function assignmentTemplate(item, movement, device) {
+  const snapshot = movement.snapshot_json ? JSON.parse(movement.snapshot_json) : null;
+  const s = snapshot || { ...device, from_employee: movement.sender || 'Ombor', to_employee: movement.recipient || 'Ombor' };
+  const title = movement.to_employee_id ? 'Qurilmani xodimga biriktirish dalolatnomasi' : 'Qurilmani omborga qaytarish dalolatnomasi';
+  const movementDate = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Tashkent', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date(movement.created_at));
+  return { title, lines: [
+    `Dalolatnoma raqami: RTM-DOC-${item.id}. Harakat raqami: ${movement.id}.`,
+    `Harakat sanasi: ${movementDate} (Toshkent). Rasmiy imzolash sanasi: ______________`,
+    `Topshiruvchi: ${s.from_employee}. Bo‘lim: ${s.from_department || '__________________'}.`,
+    `Qabul qiluvchi: ${s.to_employee}. Bo‘lim: ${s.to_department || '__________________'}.`,
+    `Qurilma: ${s.inventory_no} — ${s.model}. Seriya raqami: ${s.serial_no}.`,
+    `Texnik parametrlar: ${s.specs || '__________________'}. Miqdor: 1 dona.`,
+    `Qayd etilgan joylashuv: ${s.building}, ${s.room}-xona.`,
+    `Harakat paytidagi holat: ${s.condition || '__________________'}.`,
+    `Asos: ${movement.basis}. Moddiy javobgar: ${s.responsible || '__________________'}.`,
+    'Komplektatsiya va tashqi holat: __________________________________________________',
+    'Tomonlar qurilmani ko‘zdan kechirib, yuqoridagi ma’lumotlar asosida topshirganini va qabul qilganini tasdiqlaydi.',
+    'Topshiruvchi F.I.Sh. va imzosi: __________________________________ Sana: __________',
+    'Qabul qiluvchi F.I.Sh. va imzosi: ________________________________ Sana: __________',
+    'Mas’ul shaxs F.I.Sh. va imzosi: __________________________________ Sana: __________',
+    ...(snapshot ? [] : ['Eski yozuv: harakat paytidagi to‘liq nusxa saqlanmagan. Qurilma rekvizitlari joriy kartochkadan olindi; rasmiy imzolashdan oldin tekshiring.']),
+    'Bu shablon. Qo‘lda tasdiqlangan nusxani imzolagach PDF yoki rasm sifatida tizimga yuklang. Yuklashning o‘zi tasdiqlash yoki elektron raqamli imzo hisoblanmaydi.'
+  ] };
 }
 export const exportColumns = {
   tickets: [['id', 'ID'], ['title', 'Mavzu'], ['department', 'Bo‘lim'], ['creator', 'Murojaatchi'], ['assignee', 'Ijrochi'], ['category', 'Toifa'], ['priority', 'Ustuvorlik'], ['status', 'Holat'], ['created_at', 'Yaratilgan'], ['due_at', 'SLA muddati']],

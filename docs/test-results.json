@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-04T16:47:22.703Z",
+  "date": "2026-11-05T14:11:37.584Z",
   "database": "SQLite",
   "results": [
     {
@@ -51,11 +51,39 @@
       "status": "passed"
     },
     {
+      "name": "Strict device ownership across roles and exports",
+      "status": "passed"
+    },
+    {
+      "name": "Configurable SLA / snapshots / concurrent edits",
+      "status": "passed"
+    },
+    {
+      "name": "Signed assignment documents / access / immutable history",
+      "status": "passed"
+    },
+    {
       "name": "Excel import / rollback",
       "status": "passed"
     },
     {
       "name": "User / department / offboarding",
+      "status": "passed"
+    },
+    {
+      "name": "Multiple roles / union permissions / revoked sessions",
+      "status": "passed"
+    },
+    {
+      "name": "People / department edits and filters",
+      "status": "passed"
+    },
+    {
+      "name": "Dismissal status / inactivity / restoration",
+      "status": "passed"
+    },
+    {
+      "name": "System journal / before-after / filters / pagination",
       "status": "passed"
     },
     {
@@ -67,8 +95,16 @@
       "status": "passed"
     },
     {
+      "name": "Version 2 to 3 migration preserves existing data",
+      "status": "passed"
+    },
+    {
+      "name": "Version 3 to 4 role and history migration",
+      "status": "passed"
+    },
+    {
       "name": "30 concurrent dashboard duration",
-      "milliseconds": 59
+      "milliseconds": 126
     },
     {
       "name": "30 concurrent requests",

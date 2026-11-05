@@ -35,16 +35,18 @@ export function totp(secret, time = Date.now()) {
 export function verifyTotp(secret, code) {
   return /^\d{6}$/.test(String(code)) && [-1, 0, 1].some(n => totp(secret, Date.now() + n * 30000) === code);
 }
-export const manager = user => ['superadmin', 'manager'].includes(user.role);
-export const inventoryManager = user => manager(user) || user.role === 'inventory';
+export const rolesOf = user => Array.isArray(user?.roles) ? roles.filter(role => user.roles.includes(role)) : roles.includes(user?.role) ? [user.role] : [];
+export const hasRole = (user, role) => rolesOf(user).includes(role);
+export const manager = user => hasRole(user, 'superadmin') || hasRole(user, 'manager');
+// Only the two central management roles administer the shared device register.
+export const inventoryManager = user => manager(user);
 export function canSeeDevice(user, device) {
-  return manager(user) || ['technician', 'inventory'].includes(user.role) ||
-    (user.role === 'department_head' && user.department_id === device.department_id) || device.employee_id === user.id;
+  return manager(user) || device.employee_id === user.id;
 }
 export function canSeeTicket(user, ticket) {
   return manager(user) || ticket.created_by === user.id ||
-    (user.role === 'technician' && ticket.assigned_to === user.id) ||
-    (user.role === 'department_head' && ticket.department_id === user.department_id);
+    (hasRole(user, 'technician') && ticket.assigned_to === user.id) ||
+    (hasRole(user, 'department_head') && ticket.department_id === user.department_id);
 }
 export const transitions = {
   new: ['reviewing', 'rejected'], reviewing: ['assigned', 'waiting', 'rejected'],

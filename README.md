@@ -4,6 +4,10 @@ Texnik xizmat va AKT inventarini boshqarish tizimining ishlaydigan test versiyas
 
 Tizim markaziy serverda ishlaydi. Brauzer, API, autentifikatsiya, QR, PDF, DOCX va Excel funksiyalari tashqi internet yoki CDNga murojaat qilmaydi. Kutubxonalarni dastlab o‘rnatish yoki Docker obrazini qurish uchun internet kerak; tayyor muhitni LANda internetsiz ishlatish mumkin.
 
+0.2.0 yangilanishi: superadmin SLA sozlamalari, rahbar/superadmindan boshqa rollar uchun **Mening qurilmalarim**, biriktirish/qaytarish shablonlari va qo‘lda imzolangan fayllarni mustaqil tekshirish. Foyda va cheklovlar [takliflar bahosi va foydalanish tartibida](docs/06-takliflar-va-yangilanish.md) yozilgan.
+
+0.3.0 yangilanishi: xodimga bir nechta rol, rol va bo‘limini tahrirlash, faollik toggle switch, alohida **Bo‘shagan** ish holati, xodim/bo‘lim qidiruv-filtrlari va sahifalangan **Tizim jurnali**. [Foydalanish tartibi va qarorlar](docs/07-xodimlar-va-tizim-jurnali.md).
+
 ## Tez ishga tushirish
 
 Node.js 24 yoki yuqorisi kerak. Loyiha papkasida:
@@ -39,7 +43,7 @@ Bir MFA kodi qayta ishlatilmaydi. Productionda alohida tasodifiy sir, shaxsiy au
 
 ## Amalga oshirilgan funksiyalar
 
-- Olti rol va serverda bo‘lim bo‘yicha ruxsat nazorati; kirish, sessiya, CSRF, MFA va audit.
+- Olti rolni bir hisobga birgalikda biriktirish va serverda ruxsat nazorati; xodim/bo‘lim tahriri, ish holati va faollik; kirish, sessiya, CSRF, MFA va tizim jurnali.
 - Murojaat yaratish, izoh/fayl, ijrochi, SLA, guruhlash, vaqtli tarix, bajarish/tasdiqlash/yopish, qayta ochish, 1–5 baho va PDF ariza.
 - Qurilmalar kartochkasi, inventar/seriya unikalligi, holat, qidiruv/filtr, Excel import, Excel/CSV/PDF eksport.
 - Xodimga biriktirish, bo‘limlararo ko‘chirish, qaytarish, optimistik ziddiyat nazorati, harakat tarixi, chiqish tekshiruvi va avtomatik dalolatnoma loyihasi.

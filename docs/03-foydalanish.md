@@ -14,13 +14,13 @@ Bu qo‘llanma sun’iy test loyihasi uchun yozilgan. Ko‘rsatilgan rtm.example
 
 ## Qurilma va harakat
 
-Moddiy javobgar yoki rahbar **Qurilmalar reyestri → Qurilma qo‘shish** orqali qurilmani yozadi. Inventar va seriya raqami takrorlanmaydi. Qurilmaning texnik parametrlari, bo‘limi, xona va moddiy javobgarini kiriting.
+Markaz rahbari yoki superadmin **Qurilmalar reyestri → Qurilma qo‘shish** orqali qurilmani yozadi. Inventar va seriya raqami takrorlanmaydi. Qurilmaning texnik parametrlari, bo‘limi, xona va moddiy javobgarini kiriting. Qolgan rollar **Mening qurilmalarim** orqali faqat o‘ziga biriktirilgan qurilmalarni ko‘radi; ularda umumiy inventar va biriktirish amallari yo‘q.
 
 **Biriktirishlar → O‘tkazish**da yangi xodimni va asosni tanlang, tasdiqlang. Bo‘lim qabul qiluvchining bo‘limiga yangilanadi. Qabul qiluvchini bo‘sh qoldirsangiz qurilma omborga qaytariladi. Harakat tarixi va hujjat loyihasi avtomatik saqlanadi. Boshqa foydalanuvchi shu qurilmani o‘zgartirgan bo‘lsa, shaklni yangilash talab qilinadi.
 
 Kartochkadagi QR-kodni chop eting. Telefon bilan skanerlanganda server manzili LANdan ochilishi va foydalanuvchi tizimga kirgan bo‘lishi kerak. `APP_ORIGIN=https://rtm.example` bilan QR manzilining haqiqiy ichki DNSga mosligini ta’minlang. Localhost URLli QR boshqa kompyuterda serverni topa olmaydi.
 
-Inventar tekshiruvida moddiy javobgar **Inventar tekshiruvi**ni bosadi va xulosani qayd etadi. **Xodimlar va bo‘limlar**dagi qurilmalar soni ishdan ketish oldi tekshiruv ro‘yxatini ochadi. Qurilma yoki ochiq ish qolgan hisobni faolsizlantirish bloklanadi.
+Inventar tekshiruvida rahbar yoki superadmin **Inventar tekshiruvi**ni bosadi va xulosani qayd etadi. **Xodimlar va bo‘limlar**dagi qurilmalar soni ishdan ketish oldi tekshiruv ro‘yxatini ochadi. Qurilma yoki ochiq ish qolgan hisobni faolsizlantirish bloklanadi.
 
 ## Excel import
 
@@ -40,6 +40,20 @@ Rahbar yoki mutaxassis **Texnik xizmat → Reja qo‘shish**da qurilma, ijrochi,
 Tarmoqda canonical subnet (`192.0.2.0/24`) va shu subnetdagi IPni kiriting. Bir subnetda IP takrorlanmaydi. Litsenziyaga faqat hisob ma’lumoti kiritiladi; parol, token yoki maxfiy kalitlarni izohga ham yozmang. Qurilmaga o‘rnatishlar soni sotib olingan limitdan oshmaydi.
 
 Hujjatlar avval **Loyiha** holatida. Markaz rahbari tasdiqlagach **Tasdiqlangan** holati qayd etiladi. PDF/DOCX shakllarini yuklang va muassasaning rasmiy imzolash tartibiga rioya qiling. Raqamli imzo integratsiyasi bu versiyada yo‘q.
+
+Biriktirish va qaytarishda dalolatnoma kartochkasi avtomatik ochiladi. **DOCX/PDF shablon → qo‘lda imzolash → Imzolangan fayl qo‘shish** tartibidan foydalaning. Fayl 5 MBgacha PDF/PNG/JPEG bo‘lishi mumkin. Nusxani yuklagan shaxsdan boshqa rahbar yoki superadmin **Nusxani tekshirish** orqali qabul qiladi yoki sabab bilan rad etadi. Har bir nusxa tarixda saqlanadi; qabul qilish hujjatni tasdiqlaydi. Yuklashning o‘zi tasdiqlash emas. To‘liq tartib [yangilanish hujjatida](06-takliflar-va-yangilanish.md).
+
+## SLA sozlash
+
+Superadmin hisobida **Sozlamalar → SLA sozlash**. Har ustuvorlikka 1–720 soat kiriting. Shoshilinch ≤ yuqori ≤ o‘rta ≤ past tartibini saqlang. Tahrir yangi murojaatlarga va keyin ustuvorligi o‘zgargan murojaatlarga amal qiladi, avvalgi muddatlar saqlanadi. Boshqa hisoblarda shu panel faqat o‘qish uchun ko‘rinadi.
+
+## Xodimlar, rollar va tizim jurnali
+
+Superadmin **Xodimlar va bo‘limlar → Xodimlar → Tahrirlash** orqali F.I.Sh., telefon, bo‘lim va bir nechta rolni belgilaydi. Login tarixiy identifikator sifatida o‘zgarmaydi. Qidiruv hamda rol, bo‘lim, faollik va ish holati filtrlari birgalikda ishlaydi. **Bo‘limlar** tabida qidiruv, bino filtri va bo‘lim/bino nomini tahrirlash mavjud.
+
+Faollik yonidagi toggle hisobni yoqadi/o‘chiradi. O‘chirishda tasdiq talab qilinadi; qurilmalar, ijrodagi murojaatlar yoki rejalashtirilgan xizmatlar qolgan bo‘lsa sabab ko‘rsatiladi. Avval ularni topshiring, keyin hisobni faolsizlantiring, so‘ng **Tahrirlash → Ish holati → Bo‘shagan**ni tanlang. Tiklashda avval **Ishlayapti** holatiga qaytaring, keyin toggle bilan faollashtiring. Rol yoki bo‘lim tahriridan keyin xodim qayta kiradi.
+
+**Tizim jurnali**da kim, qachon, qaysi obyekt ustida amal bajargani ko‘rinadi. Obyekt, amal, ijrochi va sana filtrlarini tanlab **Qidirish**ni bosing. **Batafsil** yangi xodim/bo‘lim/SLA o‘zgarishlarining oldingi-keyingi qiymatlarini ko‘rsatadi. Oldingi versiyadan qolgan hodisalarda qo‘shimcha maydon nusxasi bo‘lmasligi mumkin; mavjud vaqt va tafsilot saqlanadi. To‘liq [0.3.0 qo‘llanmasi](07-xodimlar-va-tizim-jurnali.md).
 
 ## Oflayn loyiha
 
